@@ -62,7 +62,7 @@ def download_updates(df,result_file,dest):
             df.at[index,'message']="pending"
             df.at[index,'name']=file
             df.at[index,'folder']=folder_name
-            #ftp.retrbinary("RETR "+file, open(os.path.join(work_dir,file),"wb").write)
+            ftp.retrbinary("RETR "+file, open(os.path.join(work_dir,file),"wb").write)
             print file + " downloaded"
             df.at[index,'date']=str(datetime.now().date())
             df.at[index,'time']=str(datetime.now().time())
@@ -86,7 +86,7 @@ def download_baseline(df,result_file,dest):
     print "Pubmed BaseLine download Starting ..." 
     for file in filelist:
         if file.endswith("xml.gz"):
-            #ftp.retrbinary("RETR "+file, open(os.path.join(dest,file),"wb").write)
+            ftp.retrbinary("RETR "+file, open(os.path.join(dest,file),"wb").write)
             print file + " downloaded"
     print "Pubmed BaseLine download Finished"  
     df.at[index,'date']=str(datetime.now().date())
