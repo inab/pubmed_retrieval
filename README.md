@@ -1,4 +1,4 @@
-Pubmed Update
+Pubmed Retrieval 
 ========================
 
 This library is a basic download/update of the PubMed database into a working directory.  
