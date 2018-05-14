@@ -43,4 +43,4 @@ This library can be use as a step of a pipeline with the objective of mantain up
 	
 	docker run --rm -u $UID  -v /home/yourname/pubmed_data:/app/data pubmed_update
 
-	the path home/yourname/pubmed_data will be the working directory in where the data will be downloaded
+	the path home/yourname/pubmed_data will be the working directory in where the data will be downloaded.
