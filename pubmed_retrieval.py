@@ -14,17 +14,20 @@ ftp=FTP("ftp.ncbi.nlm.nih.gov")
 ftp.login("","")
 
 if __name__ == '__main__':
-    import pubmed_update
+    import pubmed_retrieval
     try:
         dest=args.o
         remove=args.r
     except Exception as inst:
-        print( "error reading destination path.")
+        print( "Error: leyendo los parametros.")
         sys.exit(1) 
+    if dest==None:
+        print( "Error: complete the destination path") 
+        sys.exit(1)    
     if not os.path.exists(dest):
-        print( "error the destination path does not exist.") 
+        print( "Error: the destination path does not exist.") 
         sys.exit(1) 
-    pubmed_update.Main(args)
+    pubmed_retrieval.Main(args)
     
 
 def Main(args):
@@ -42,55 +45,34 @@ def Main(args):
         df = pandas.DataFrame(columns=columns)
     df_=df.loc[df['name'] == 'baseline']
     if(len(df_)==0):
-        download_baseline(df,result_file,dest)    
-    download_updates(df,result_file,dest)
-            
-def download_updates(df,result_file,dest):
-    source="/pubmed/updatefiles/"
-    files_downloaded = df['name'].tolist()
-    ftp.cwd(source)
-    filelist=ftp.nlst()
+        folder_name = 'baseline'
+        source="/pubmed/baseline/"
+        download(source, df,result_file,dest, folder_name)    
     folder_name = "updatefiles_"+str(datetime.now().date())
+    source="/pubmed/updatefiles/"
+    download(source, df,result_file,dest, folder_name)
+            
+def download(source,df,result_file,dest, folder_name):
     work_dir = os.path.join(dest, folder_name)
     if not os.path.exists(work_dir):
         os.makedirs(work_dir)
-    print "Pubmed Updates download Starting ..." 
+    files_downloaded = df['name'].tolist()
+    ftp.cwd(source)
+    filelist=ftp.nlst()
     for file in filelist:
-        if (file.endswith("xml.gz") & (file not in files_downloaded)):
+        if ((file.endswith("xml.gz") | file.endswith("md5")) & (file not in files_downloaded)):
             index = len(df.index) + 1
             df.at[index,'operation']="download"
             df.at[index,'message']="pending"
             df.at[index,'name']=file
             df.at[index,'folder']=folder_name
-            ftp.retrbinary("RETR "+file, open(os.path.join(work_dir,file),"wb").write)
+            #ftp.retrbinary("RETR "+file, open(os.path.join(work_dir,file),"wb").write)
             print file + " downloaded"
             df.at[index,'date']=str(datetime.now().date())
             df.at[index,'time']=str(datetime.now().time())
             df.at[index,'message']="complete"
             df.at[index,'result']="success"
             df.to_csv(result_file)    
-    print "Pubmed Update download Finished"     
+    df.to_csv(result_file)
+
     
-def download_baseline(df,result_file,dest):
-    source="/pubmed/baseline/"
-    work_dir = os.path.join(dest, "baseline")
-    if not os.path.exists(work_dir):
-        os.makedirs(work_dir)
-    index = len(df.index) + 1    
-    df.at[index,'name']='baseline'  
-    df.at[index,'folder']='baseline'
-    df.at[index,'operation']="download"
-    df.at[index,'message']="pending"
-    ftp.cwd(source)
-    filelist=ftp.nlst()
-    print "Pubmed BaseLine download Starting ..." 
-    for file in filelist:
-        if file.endswith("xml.gz"):
-            ftp.retrbinary("RETR "+file, open(os.path.join(dest,file),"wb").write)
-            print file + " downloaded"
-    print "Pubmed BaseLine download Finished"  
-    df.at[index,'date']=str(datetime.now().date())
-    df.at[index,'time']=str(datetime.now().time())
-    df.at[index,'message']="finished"
-    df.at[index,'result']="success"
-    df.to_csv(result_file)    
