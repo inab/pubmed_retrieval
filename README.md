@@ -15,8 +15,6 @@ The tool only download the files that contains the contents of the documents, th
 
 This library can be use as a step of a pipeline with the objective of mantain updated the PubMed Data to continue with the next processing.
 
- 
-
 ========================
 
 1.- Clone this repository 

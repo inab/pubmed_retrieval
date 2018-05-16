@@ -19,10 +19,10 @@ if __name__ == '__main__':
         dest=args.o
         remove=args.r
     except Exception as inst:
-        print( "Error: leyendo los parametros.")
+        print( "Error: reading the parameters.")
         sys.exit(1) 
     if dest==None:
-        print( "Error: complete the destination path") 
+        print( "Error: complete the destination path.") 
         sys.exit(1)    
     if not os.path.exists(dest):
         print( "Error: the destination path does not exist.") 
@@ -33,8 +33,8 @@ if __name__ == '__main__':
 def Main(args):
     dest=args.o
     remove=args.r
-    result_file = dest + "/update_history.csv"
-    columns = ["name","operation","folder","date","time","message","result"]
+    result_file = dest + "/index.csv"
+    columns = ["name","date","time","retrieval","folder"]
     if(remove):
         for filename in os.listdir(dest):
             if (filename.endswith(".gz") | filename.endswith(".md5")):
@@ -43,14 +43,18 @@ def Main(args):
         df = pandas.read_csv(result_file, header=0, index_col=0)
     else:
         df = pandas.DataFrame(columns=columns)
-    df_=df.loc[df['name'] == 'baseline']
+    df_=df.loc[df['folder'] == 'baseline']
+    retrieval_output = dest + "/retrieval/"
+    if not os.path.exists(retrieval_output):
+        os.makedirs(retrieval_output)
+    
     if(len(df_)==0):
         folder_name = 'baseline'
         source="/pubmed/baseline/"
-        download(source, df,result_file,dest, folder_name)    
+        download(source, df,result_file,retrieval_output, folder_name)    
     folder_name = "updatefiles_"+str(datetime.now().date())
     source="/pubmed/updatefiles/"
-    download(source, df,result_file,dest, folder_name)
+    download(source, df,result_file,retrieval_output, folder_name)
             
 def download(source,df,result_file,dest, folder_name):
     work_dir = os.path.join(dest, folder_name)
@@ -61,18 +65,20 @@ def download(source,df,result_file,dest, folder_name):
     filelist=ftp.nlst()
     for file in filelist:
         if ((file.endswith("xml.gz") | file.endswith("md5")) & (file not in files_downloaded)):
-            index = len(df.index) + 1
-            df.at[index,'operation']="download"
-            df.at[index,'message']="pending"
-            df.at[index,'name']=file
-            df.at[index,'folder']=folder_name
-            #ftp.retrbinary("RETR "+file, open(os.path.join(work_dir,file),"wb").write)
-            print file + " downloaded"
-            df.at[index,'date']=str(datetime.now().date())
-            df.at[index,'time']=str(datetime.now().time())
-            df.at[index,'message']="complete"
-            df.at[index,'result']="success"
-            df.to_csv(result_file)    
+            if(file.endswith("xml.gz")):
+                index = len(df.index) + 1
+                df.at[index,'retrieval']="pending"
+                df.at[index,'name']=file
+                df.at[index,'folder']=folder_name
+                #ftp.retrbinary("RETR "+file, open(os.path.join(work_dir,file),"wb").write)
+                print file + " downloaded"
+                df.at[index,'date']=str(datetime.now().date())
+                df.at[index,'time']=str(datetime.now().time())
+                df.at[index,'retrieval']="complete"
+                df.to_csv(result_file)
+            else:
+                #ftp.retrbinary("RETR "+file, open(os.path.join(work_dir,file),"wb").write)     
+                print file + " downloaded" 
     df.to_csv(result_file)
 
     
