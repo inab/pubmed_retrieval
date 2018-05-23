@@ -54,6 +54,7 @@ def download(source,dest, folder_name):
     filelist=ftp.nlst()
     for file in filelist:
         if (file.endswith("xml.gz") & (file not in files_list_downloaded)):
+            print file
             ftp.retrbinary("RETR "+file, open(os.path.join(work_dir,file),"wb").write)
             pubmedRet = PubMedRetrieval(file,'1',datetime.now(),folder_name,'0','null','null')
             print file + " downloaded"
