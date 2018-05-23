@@ -4,25 +4,27 @@ Created on May 18, 2018
 @author: jcorvi
 '''
 from sqlalchemy import exists
-from __init__ import Session
+from DataBaseUtil import getSession
 
 class DAO:
     def save(self, instance):
-        session = Session()
+        session = getSession()
         try:
             session.add(instance)
             session.commit()
-        except:
+        except Exception as inst:
+            print inst
             session.rollback()
             raise
         finally:
             session.close()
             
     def findByName(self, model_class, name):
-        session = Session()
+        session = getSession()
         try:
             ret = session.query(exists().where(model_class.name==name)).scalar()
-        except:
+        except Exception as inst:
+            print inst
             session.rollback()
             raise
         finally:
@@ -30,10 +32,11 @@ class DAO:
             return ret  
         
     def findAllNames(self, model_class):
-        session = Session()
+        session = getSession()
         try:
             ret = session.query(model_class.filename).all()
-        except:
+        except Exception as inst:
+            print inst
             session.rollback()
             raise
         finally:

@@ -1,4 +1,4 @@
-import sys
+
 import os
 
 from ftplib import FTP
@@ -6,33 +6,38 @@ from datetime import datetime
 import argparse
 from model import PubMedRetrieval
 from dao import DAO
+import ConfigParser
+from DataBaseUtil import InitDataBase
 
 parser=argparse.ArgumentParser()
 parser.add_argument('-o', help='Output Directory')
-
+parser.add_argument('-u', help='SQLITE Database URL')
+parser.add_argument('-p', help='Path Parameters')
 
 args=parser.parse_args()
 ftp=FTP("ftp.ncbi.nlm.nih.gov")
 ftp.login("","")
-
+parameters={}
 if __name__ == '__main__':
     import pubmed_retrieval
-    try:
-        dest=args.o
-    except Exception as inst:
-        print( "Error: reading the parameters.")
-        sys.exit(1) 
-    if dest==None:
-        print( "Error: complete the destination path.") 
-        sys.exit(1)    
-    if not os.path.exists(dest):
-        print( "Error: the destination path does not exist.") 
-        sys.exit(1) 
-    pubmed_retrieval.Main(args)
-
-
-def Main(args):
-    dest=args.o
+    parameters = pubmed_retrieval.ReadParameters(args)     
+    InitDataBase(parameters)
+    pubmed_retrieval.Main(parameters)
+    
+def ReadParameters(args):
+    if(args.p!=None):
+        Config = ConfigParser.ConfigParser()
+        Config.read(args.p)
+        parameters['database_url']=Config.get('DATABASE', 'url')
+        parameters['output_directory']=Config.get('MAIN', 'output')
+    if(args.u!=None):
+        parameters['database_url']=args.u
+    if(args.o!=None):
+        parameters['output_directory']=args.o
+    return parameters
+    
+def Main(parameters):
+    dest=parameters['output_directory']
     retrieval_output = dest + "/retrieval/"
     if not os.path.exists(retrieval_output):
         os.makedirs(retrieval_output)
