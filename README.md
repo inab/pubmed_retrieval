@@ -19,7 +19,7 @@ This library can be use as a step of a pipeline with the objective of mantain up
 
 1.- Clone this repository 
 
-    $ git clone https://github.com/javicorvi/pubmed_update.git
+    $ git clone https://github.com/javicorvi/pubmed_retrieval.git
     
 2.- Python 2.7 
 	
@@ -30,7 +30,7 @@ This library can be use as a step of a pipeline with the objective of mantain up
 	
 4.- Run the script
 	
-	To run the script just execute python pubmed_update -p /home/myuser/config.properties
+	To run the script just execute python pubmed_retrieval -p /home/myuser/config.properties
 	
 	The config.properties file contains the parameters for the execution
 	
@@ -46,10 +46,10 @@ This library can be use as a step of a pipeline with the objective of mantain up
 5.- The container 
 	
 	If you just want to run the app without any kind of configuration you can do it 
-	through the docker container is avaiblable in https://hub.docker.com/r/javidocker/pubmed_update/ 
+	through the docker container is avaiblable in https://hub.docker.com/r/inab/pubmed_retrieval/ 
 
 	To run the docker: 
 	
-	docker run --rm -u $UID  -v /home/yourname/pubmed_data:/app/data pubmed_update
+	docker run --rm -u $UID  -v /home/yourname/pubmed_data:/app/data pubmed_retrieval
 
 	the path home/yourname/pubmed_data will be the working directory in where the data will be downloaded
