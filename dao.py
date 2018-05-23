@@ -4,7 +4,7 @@ Created on May 18, 2018
 @author: jcorvi
 '''
 from sqlalchemy import exists
-from DataBaseUtil import getSession
+from db_util import getSession
 
 class DAO:
     def save(self, instance):

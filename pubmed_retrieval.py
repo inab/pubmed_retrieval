@@ -7,7 +7,7 @@ import argparse
 from model import PubMedRetrieval
 from dao import DAO
 import ConfigParser
-from DataBaseUtil import InitDataBase
+from db_util import InitDataBase
 
 parser=argparse.ArgumentParser()
 parser.add_argument('-o', help='Output Directory')

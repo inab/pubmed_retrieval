@@ -30,8 +30,19 @@ This library can be use as a step of a pipeline with the objective of mantain up
 	
 4.- Run the script
 	
-	To run the script just execute python pubmed_update -o /home/myname/pubmed_data 
-
+	To run the script just execute python pubmed_update -p /home/myuser/config.properties
+	
+	The config.properties file contains the parameters for the execution
+	
+	[MAIN]
+	output=/home/myuser/pubmed_data/
+	[DATABASE]
+	url=sqlite:////home/myuser/sqlite_databases/bio_databases/bio_databases.db
+	
+	To pass parameters individually:
+	-o ----- > Output Directory
+	-u ------> SQLITE Database URL
+	
 5.- The container 
 	
 	If you just want to run the app without any kind of configuration you can do it 
