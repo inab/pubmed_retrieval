@@ -42,3 +42,15 @@ class DAO:
         finally:
             session.close()  
             return ret   
+    
+    def findAll(self, model_class):
+        session = getSession()
+        try:
+            ret = session.query(model_class).all()
+        except Exception as inst:
+            print inst
+            session.rollback()
+            raise
+        finally:
+            session.close()  
+            return ret   

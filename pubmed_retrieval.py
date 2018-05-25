@@ -1,6 +1,6 @@
 
 import os
-
+import sys
 from ftplib import FTP
 from datetime import datetime
 import argparse
@@ -25,17 +25,30 @@ if __name__ == '__main__':
     pubmed_retrieval.Main(parameters)
     
 def ReadParameters(args):
+    parameters_error=False
+    parameters_obligation=False
     if(args.p!=None):
         Config = ConfigParser.ConfigParser()
         Config.read(args.p)
         parameters['database_url']=Config.get('DATABASE', 'url')
         parameters['output_directory']=Config.get('MAIN', 'output')
+    else:
+        parameters_obligation=True
     if(args.u!=None):
         parameters['database_url']=args.u
+    elif (parameters_obligation):
+        print ("No database url provided")
+        parameters_error=True
     if(args.o!=None):
         parameters['output_directory']=args.o
+    elif (parameters_obligation):
+        print ("No output directory provided")
+        parameters_error=False
+    if(parameters_error):
+        print("Please send the correct parameters.  You can type for --help ")
+        sys.exit(1)
     return parameters
-    
+ 
 def Main(parameters):
     dest=parameters['output_directory']
     retrieval_output = dest + "/retrieval/"

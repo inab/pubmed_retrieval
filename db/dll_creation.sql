@@ -15,6 +15,7 @@ CREATE TABLE `pubmed_articles` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`pmid`	INTEGER NOT NULL UNIQUE,
 	`filename`	TEXT NOT NULL,
+	`parent_filename`	TEXT NOT NULL,
 	`json`	INTEGER NOT NULL,
 	`json_datetime`	TEXT,
 	`json_path`	TEXT,
