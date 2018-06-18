@@ -28,6 +28,7 @@ CREATE TABLE `pmc_articles` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`pmid`	INTEGER NOT NULL UNIQUE,
 	`filename`	TEXT NOT NULL,
+	`parent_filename`	TEXT NOT NULL,
 	`download`	INTEGER NOT NULL,
 	`download_datetime`	TEXT,
 	`download_path`	TEXT,
