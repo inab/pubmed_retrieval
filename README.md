@@ -53,7 +53,7 @@ This library can be use as a step of a pipeline with the objective of mantain up
 	
 	Remember to generate the database in home/yourname/your_work_dir/ 
 	
-6.- The container 
+6.- The docker container 
 	
 	If you just want to run the app without any kind of configuration you can do it 
 	through the docker container is avaiblable in https://hub.docker.com/r/inab/pubmed_retrieval/ 
