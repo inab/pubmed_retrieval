@@ -1,4 +1,4 @@
-Pubmed Retrieval 
+pubmed_retrieval
 ========================
 
 This library is a basic download/update of the PubMed database into a working directory.  
@@ -19,24 +19,12 @@ This library can be use as a step of a pipeline with the objective of mantain up
 
 1.- Clone this repository 
 
-    $ git clone https://github.com/javicorvi/pubmed_retrieval.git
+    $ git clone https://github.com/inb/pubmed_retrieval.git
     
 2.- Python 2.7 
 	
 	
-3.- Third Party 
-	
-	pip install pandas
-	pip install SQLAlchemy
-
-4.- Sqlite 
-	
-	To control the updates of pubmed a sqlite database is generated to store the already downloaded files.  
-	The script for the creation are inside the project: db/dll_creation.sql as well as an empty database ready to use: db/bio_databases.db.
-	 
-	The database has to be manually generated or copy; 
-	
-5.- Run the script
+3.- Run the script
 	
 	To run the script just execute python pubmed_retrieval -p /home/myuser/config.properties
 	
@@ -53,7 +41,7 @@ This library can be use as a step of a pipeline with the objective of mantain up
 	
 	Remember to generate the database in home/yourname/your_work_dir/ 
 	
-6.- The docker container 
+4.- The docker container 
 	
 	If you just want to run the app without any kind of configuration you can do it 
 	through the docker container is avaiblable in https://hub.docker.com/r/inab/pubmed_retrieval/ 
